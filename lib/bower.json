@@ -1,0 +1,25 @@
+{
+  "name": "lib",
+  "version": "0.0.0",
+  "authors": [
+    "Felix Grayson <felixgrayosn@hotmail.com>"
+  ],
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mime": "~1.2.11",
+    "socket.io": "~1.2.0",
+    "bootstrap": "~3.3.0"
+  }
+}
