@@ -1,23 +1,45 @@
-(function(){
-	function size (width, height){
-		this.width = width;
-		this.height = height;
-	}
+(function() {
+    var Chat = function(socket) {
+        this.socket = socket;
+    }
 
-	var smallSize = new size(600,$(window).height());
+    // build the message structure, send chat message
+    Chat.prototype.sendmessage = function(room, text) {
+        var message = {
+            room: room,
+            text: text
+        };
+        this.socket.emit('message', message);
+    };
 
-	function resizeWinTo(){
-		window.resizeTo(smallSize.width,smallSize.height);
-		window.focus();
-	}
+    //function change rooms
+    Chat.prototype.changeRoom = function(room) {
+        this.socket.emit('join', {
+            newRoom: room
+        });
+    };
 
-	$(function(){
-		resizeWinTo();
-		$(window).resize(function(){
-			if($(window).width() > 600 || $(window).width() < 600 ){
-				resizeWinTo();
-			}
-		});
-	});
-	
+    //process chat command
+    Chat.prototype.processCommand = function(command) {
+        var words = command.split(' ');
+        command = words[0].substring(1, words[0].length).toLowerCase();
+        var message = false;
+
+        switch (command) {
+            case 'join':
+                words.shift();
+                var room = words.join('');
+                this.changeRoom(room);
+                break;
+            case 'nick':
+                words.shift();
+                var name = words.join(' ');
+                this.socket.emit('nameAttempt', name);
+            default:
+                message = 'Unrecognized Command.'
+                break;
+        }
+
+        return message;
+    };
 })();
